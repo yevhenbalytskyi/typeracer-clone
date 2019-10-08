@@ -1,13 +1,60 @@
 <html>
 <head>
 	<link rel="stylesheet" href="/../static/css/index.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<title>Typeracer clone</title>
 </head>
 <body>
 
-	<div id="text-to-write">asdfasd</div>
 
-	<input type="text"/>
+
+	<div id="text-to-write">He was smiling... That's right. You know, that, that Luke smile of his. He had it on his face right to the very end. Hell, if they didn't know it 'fore, they could tell right then that they weren't a-gonna beat him. That old Luke smile. Oh, Luke. He was some boy. Cool Hand Luke. Hell, he's a natural-born world-shaker.</div>
+
+	<div id="animated-text"></div>
+
+	<input id="type-input" type="text"/>
+
+	<script type="text/javascript">
+
+		var str = $("#text-to-write").text();
+		var res = str.split(" ");
+		var counter = 0;
+
+		for (var i = 0; i <= res.length - 1; i++) {
+			document.getElementById('animated-text').innerHTML += "<span id='word-" + i + "'>"+ res[i] +"</span> ";
+		};
+
+		document.getElementById("type-input").addEventListener('keyup', function (event)
+		{
+			var length = $('#type-input').val().replace(/ /g,'').length;
+
+			for (var i = 0; i <= counter; i++) {
+				$("#word-" + i).css("color", "black");
+			};
+
+		    if( $("#type-input").val().replace(/ /g,'') != res[counter].slice(0, length) ){
+		    	$("#type-input").css("background-color", "red");
+		    	$("#word-" + counter).css("color", "red");
+		    } else {
+		    	$("#type-input").css("background-color", "white");
+		    	$("#word-" + counter).css("color", "green");
+		    }
+
+		    if (event.keyCode === 32){
+		    	if($('#type-input').val().replace(/ /g,'') === res[counter]){
+			        $('#type-input').val('');
+			        console.log("good job: " + res[counter]);
+			        counter++;
+		    	} else {
+		    		$("#type-input").css("background-color", "red");
+		    		$("#word-" + counter).css("color", "red");
+		    		console.log("wrong: " + res[counter]);
+		    	}
+		    }
+
+		});
+
+	</script>
 
 </body>
 </html>
