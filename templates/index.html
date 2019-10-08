@@ -8,41 +8,63 @@
 
 
 
-	<div id="text-to-write" style="visibility: hidden">No more will my green sea go turn a deeper blue. I could not foresee this thing happening to you. If I look hard enough into the setting sun, my love will laugh with me before the morning comes.</div>
+	<div id="text-to-write" style="visibility: hidden">{{ text }}</div>
 
 	<div id="progress-bar"></div>
 
 	<div id="animated-text"></div>
 
-	<input id="type-input" type="text"/>
+	<button onClick="window.location.reload();">Next text --></button>
+
+	<div id="countdown"></div>
+
+	<input id="type-input" type="text" placeholder="Type the above text here when the race begins.">
 
 	<script type="text/javascript">
 
+		var chars = $('#text-to-write').text().length;
 		var str = $("#text-to-write").text();
 		var res = str.split(" ");
 		var counter = 0;
+		var t0 = 2;
 
 		for (var i = 0; i <= res.length - 1; i++) {
 			document.getElementById('animated-text').innerHTML += "<span id='word-" + i + "'>"+ res[i] +"</span> ";
 		};
 
+		$('#type-input').keypress(function(e) {e.preventDefault();});
 
+		setTimeout(function() { $('#type-input').unbind('keypress'); $('input:text').attr('placeholder',''); var t0 = performance.now(); }, 5000);
+
+		var countdown = 5;
+		var interval = setInterval(function() {
+		    countdown--;
+		    $('#countdown').text(countdown.toString());
+		    if (countdown == 0) {
+		        clearInterval(interval);
+		        $('#countdown').text("GO");
+		    }
+		}, 1000);
 
 		document.getElementById("type-input").addEventListener('keyup', function (event)
 		{
 
-			var progress = (counter/res.length) * 100;
-			console.log(progress)
-			$("#progress-bar").css("width", "" + progress + "%");
-
 		    wordReColor(counter);
+
+		    if ($('#type-input').val().replace(/ /g,'') === res[counter] && counter === res.length - 1){
+		    	var t1 = performance.now();
+		    	$('#type-input').val('');
+		    	wpm = chars/((t1 - t0 - 5000)/60000)/5;
+		    	console.log("Your speed: " + Math.round(wpm) + " WPM.");
+		    	$('#countdown').text("Your speed is " + Math.round(wpm) + " WPM.");
+		    }
 
 		    if (event.keyCode === 32){
 		    	if($('#type-input').val().replace(/ /g,'') === res[counter]){
 			        $('#type-input').val('');
-			        console.log("good job: " + res[counter]);
 			        counter++;
 			        wordReColor(counter);
+			        progressUpdate(counter);
 		    	} else {
 		    		$("#type-input").css("background-color", "rgba(255,0,0,0.7)");
 		    		$("#word-" + counter).css("color", "red");
@@ -52,8 +74,11 @@
 
 		});
 
-
-
+		function progressUpdate(counter){
+			var progress = (counter/res.length) * 100;
+				console.log(progress);
+				$("#progress-bar").css("width", "" + progress + "%");
+		}
 
 		function wordReColor(counter){
 			var length = $('#type-input').val().replace(/ /g,'').length;

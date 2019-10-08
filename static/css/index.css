@@ -23,6 +23,21 @@ input {
 	height: 5px;
 	margin: 20px;
 	background-color: black;
-	width: 10px;
+	width: 0px;
 	transition:0.4s;
+}
+
+#countdown{
+	height: 40px;
+	text-align: center;
+	font-family: Arial,serif;
+    font-size: 35px;
+}
+
+button{
+	height: 40px;
+	width: 120px;
+	float: right;
+	margin-right: 200px;
+	margin-top: -90px;
 }
