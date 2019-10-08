@@ -8,7 +8,9 @@
 
 
 
-	<div id="text-to-write">He was smiling... That's right. You know, that, that Luke smile of his. He had it on his face right to the very end. Hell, if they didn't know it 'fore, they could tell right then that they weren't a-gonna beat him. That old Luke smile. Oh, Luke. He was some boy. Cool Hand Luke. Hell, he's a natural-born world-shaker.</div>
+	<div id="text-to-write" style="visibility: hidden">No more will my green sea go turn a deeper blue. I could not foresee this thing happening to you. If I look hard enough into the setting sun, my love will laugh with me before the morning comes.</div>
+
+	<div id="progress-bar"></div>
 
 	<div id="animated-text"></div>
 
@@ -24,35 +26,48 @@
 			document.getElementById('animated-text').innerHTML += "<span id='word-" + i + "'>"+ res[i] +"</span> ";
 		};
 
+
+
 		document.getElementById("type-input").addEventListener('keyup', function (event)
 		{
-			var length = $('#type-input').val().replace(/ /g,'').length;
 
-			for (var i = 0; i <= counter; i++) {
-				$("#word-" + i).css("color", "black");
-			};
+			var progress = (counter/res.length) * 100;
+			console.log(progress)
+			$("#progress-bar").css("width", "" + progress + "%");
 
-		    if( $("#type-input").val().replace(/ /g,'') != res[counter].slice(0, length) ){
-		    	$("#type-input").css("background-color", "red");
-		    	$("#word-" + counter).css("color", "red");
-		    } else {
-		    	$("#type-input").css("background-color", "white");
-		    	$("#word-" + counter).css("color", "green");
-		    }
+		    wordReColor(counter);
 
 		    if (event.keyCode === 32){
 		    	if($('#type-input').val().replace(/ /g,'') === res[counter]){
 			        $('#type-input').val('');
 			        console.log("good job: " + res[counter]);
 			        counter++;
+			        wordReColor(counter);
 		    	} else {
-		    		$("#type-input").css("background-color", "red");
+		    		$("#type-input").css("background-color", "rgba(255,0,0,0.7)");
 		    		$("#word-" + counter).css("color", "red");
 		    		console.log("wrong: " + res[counter]);
 		    	}
 		    }
 
 		});
+
+
+
+
+		function wordReColor(counter){
+			var length = $('#type-input').val().replace(/ /g,'').length;
+			for (var i = 0; i <= counter; i++) {
+				$("#word-" + i).css({"color": "black", "text-decoration": "none"});
+			};
+			if( $("#type-input").val().replace(/ /g,'') != res[counter].slice(0, length) ){
+		    	$("#type-input").css("background-color", "rgba(255,0,0,0.7)");
+		    	$("#word-" + counter).css("color", "red");
+		    } else {
+		    	$("#type-input").css("background-color", "white");
+		    	$("#word-" + counter).css({"color": "green", "text-decoration": "underline"});
+		    }
+		}
 
 	</script>
 
